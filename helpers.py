@@ -48,3 +48,11 @@ def translate(rna):
             currCodon = ""
     return ""
 
+basePairing = {"A": "T", "T": "A", "G": "C", "C": "G"}
+
+def revComplement(seq):
+    return "".join([basePairing[x] for x in reversed(seq)])
+
+def hamm(s, t):
+    return sum(sc != tc for sc, tc in zip(s, t))
+
