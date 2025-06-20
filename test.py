@@ -1,1 +1,1 @@
-print([1, 2][0:0])
+print(":asdfasdf".split(":"))
