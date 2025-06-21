@@ -1,0 +1,76 @@
+from collections import Counter
+
+def minDistance(word1: str, word2: str) -> int:
+        l1 = len(word1)
+        l2 = len(word2)
+        dp = [[None] * (l2 + 1) for _ in range(l1 + 1)]
+        # distance, s1, s2
+        for i in range(l1 + 1):
+            for j in range(l2 + 1):
+                # if i == 0 or j == 0:
+                #     dp[i][j] = max(i, j)
+                #     continue
+                if i == 0:
+                    dp[i][j] = (j, 1)
+                    continue
+                if j == 0:
+                    dp[i][j] = (i, 1)
+                    continue
+
+                ijAlignmentCost = 1
+                if word1[i - 1] == word2[j - 1]:
+                    ijAlignmentCost = 0
+
+                costs = [dp[i][j - 1][0] + 1,
+                        dp[i - 1][j][0] + 1,
+                        dp[i - 1][j - 1][0] + ijAlignmentCost]
+                ways = [dp[i][j - 1][1] ,
+                        dp[i - 1][j][1],
+                        dp[i - 1][j - 1][1]]
+                minCost = min(costs)
+                totalWays = 0
+                for k in range(len(costs)):
+                    if costs[k] == minCost:
+                        totalWays += ways[k]
+                totalWays = totalWays % 134217727
+                
+                dp[i][j] = (minCost, totalWays)
+        # print(dp)
+     
+        for res in dp[l1][l2]:
+            print(res)
+
+from helpers import parse_fasta
+def solution(input):
+     s1, s2 = parse_fasta(input)[1]
+     return minDistance(s1, s2)
+
+
+solution('''>Rosalind_5516
+GFNVCHSSKGKKDRGLNCNWHTEWILIGSEKRMKERWCEAVYGLWNNIFIMMLPSRTAHY
+ERMEMDNGVTNTHHNRYLHAVRWRCRSRYRDNDAQRMTYPNMTISGTTLKYNCTCCTTPW
+QIVEWMPMMLRISAPRGGCCDPEESMRRGPSLKIYHYQCYPTCNMKTRQLVDSYNSGVVI
+GGPKHFHFVGMDSMCEQMWRQQWCDHVCSEGTWFPAHDTEDHDNRNMIETRSVAPENVLK
+RWVVWTHTAKTDLPRPPAANDGLECLNKDERFEMLYKWSVHFCPVMTVFDLHILTVVLVN
+KYHPPAAYYWHKTMNPAHAPQYIRKKCWYNPALPIEDTSCEQEVNFWRHPTLDFVDFPTF
+LWGPSGQQQEQAQFSIMGRQSFTIWHFMLMGPTPEIIPTMDIIEVYTPRTNKGMGFEVLY
+WESRKPMKTGIPGQSALKSYIVRSYFKNWLFLDRIFQYSFIWEYAVKQMVDELNQSENDP
+LTAYTNQDNWLLHRGHPKPWIVTLCDSGMAITLPQMDRSDRPIFMPWRCWACFELLICTN
+NKPKYPCWSVYYVECETGIMMGIFAIAMTWKPDNSWPHIRVWRWYNESAAANTESNDARL
+CSFAFIRCCAQPSFHKAARILCAYQRNESDQFWADTINWVVLKHHVKHCHMQTEVMTAIH
+WAMYKCPQHWEKFTADKSQLVKLHNMPQTWMHEVRTCNEFFTLDNCWFPGYYRMMLYIIL
+GHM
+>Rosalind_9361
+GFNYCHSSKGKKWVWNTEWILDCKCGPKWCDKFWSVSEKRGKERWCEPVYGLWNNIFIMM
+QPSRTAHYERMEMWDYYPGVTNTHHNYCDYLHAVRWRDNDNWGCMTISGTTQKYNCTCTP
+MWYDVKPKADEWMPMMLRISAPRMVADGCCDPEKCWRKIYHYGCYPTCNSIWVWKTQGGQ
+LVDSYMKHFHFVGMGPGPSTKHAKYNFIFEQQWRCNVWSIANTWFPAHDTEDHRSKRWVH
+TRECEMFKPDHDLPRGPACQNRFEMFKSRKWSVGGFQEMRMTHEPVMTVMDTSRWFSHIL
+THDSLLHSHAVNKYHNTSLFDCPKAIHYKHAPQYFRKWCWYYPALPIEDTSRNPTLDFVQ
+VAEDKEIAQFSIIGRQSMTIWHFGLGIPTMDIIEVYTPRTNGMGFEVLYWPSRKPMKTKS
+YIVWDLCSYFKNWLFLDRIYQHHPCSFIWEYAVKVGFKIQMDPLFHAFPAGRDNQCEFMH
+KNLYNWLLSIPFCQWIMGMNWMGENDKNKDCSCSYDFCWIVTLCDSGMASLFSIHDVGPI
+FMCWAFRELLKCLTKNNDVYYVECRTGIDGVMQDMGIMEERATAMQYYIHTLVKPVNSWQ
+VGSCFTAPRWYNESAMANTESNDLFRRLCIRCCAQPSFHKAARFWAYMPINQRLKFKVEM
+PKHVKHCHMQTDVMFLFFTCRINAIHWAMYKCPPHWEKFCRDMVCVEFFTLDNCWFPGCA
+GQDKYRMMLTPKWSCCRHIILRHM''')

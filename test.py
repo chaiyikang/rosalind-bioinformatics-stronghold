@@ -1,1 +1,1 @@
-print(":asdfasdf".split(":"))
+print(3245 % 1000000)
